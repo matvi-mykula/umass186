@@ -17,6 +17,8 @@ double mystery(int[] a) {
 // initialize x as 0.0
 // loop through each element of a and add it to x
 // return the total x divided by the length of the array a
+/// answer *** returns mean or 0 if a is empty.... duh
+// my answer is not high level enough
 
 int mystery(char c, String s) {
   int x = 0;
@@ -32,6 +34,7 @@ int mystery(char c, String s) {
 // loop through each character in string s
 // if the character is not c then increment x by 1
 // return x
+///*** returns number of cahracters in s that arent equal to c */
 
 
 //// find conceptual error /////////////-------------------
@@ -75,13 +78,16 @@ public class Dog {
     private final String breed;
     private final in licenseNumber;
 
-    public Dog(String name, String breed, int licenseNumber){
+    public Dog(String n, String b, int l){
+
+        name = n;
+        breed = b;
+        licenseNumber = l;
 
 
     }
-    public boolean equals(Object obj){
-       Dog otherDog = (Dog) obj;
-       return licenseNumber == otherDog.licenseNumber;
+    public boolean equals(Dog o){
+       return licenseNumber == o.licenseNumber;
     }
 }
 
@@ -102,7 +108,6 @@ Map<String, Object> obj =  new HashMap<>();
 for (var each : a) {
     obj.put(each, false);
 }
-
 for (var each : b) {
     if(obj.containsKey(each)){
         obj.put(each, true);
@@ -112,7 +117,6 @@ for (boolean value : obj.values()) {
     if (!value){
         return false;
     }
-    
 }
 return true;
 }
