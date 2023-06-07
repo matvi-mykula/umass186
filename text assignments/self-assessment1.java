@@ -120,3 +120,20 @@ for (boolean value : obj.values()) {
 }
 return true;
 }
+
+//// correct solution
+boolean isSubset(int[] a, int[] b) {
+ for (int i: a) {
+   boolean iFound = false;
+   for (int j: b) {
+     if (i == j) {
+       iFound = true;
+       break;
+     }
+   }     
+   if (!iFound) {
+     return false;
+   }
+ }
+ return true;
+}
