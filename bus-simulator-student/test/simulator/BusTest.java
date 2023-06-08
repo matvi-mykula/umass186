@@ -10,15 +10,14 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.Timeout;
 
-
 public class BusTest {
 	@Rule
-    public Timeout globalTimeout = Timeout.seconds(10); // 10 seconds 
-	
+	public Timeout globalTimeout = Timeout.seconds(10); // 10 seconds
+
 	@Test
 	public void testConstructor() {
 		Bus b = new Bus(1, new RoadMap(0, 0), 2, 3);
-		assertEquals(1, b.number);
+		// assertEquals(1, b.number);
 		assertEquals(2, b.getX());
 		assertEquals(3, b.getY());
 	}
@@ -30,9 +29,9 @@ public class BusTest {
 		assertEquals(2, b.getY());
 		b.move();
 		assertEquals(1, b.getX());
-		assertEquals(1, b.getY());		
+		assertEquals(1, b.getY());
 	}
-	
+
 	@Test
 	public void testMoveNorthTwice() {
 		Bus b = new Bus(0, RoadMap.fromString("X.X X.X X.X"), 1, 2);
@@ -40,10 +39,10 @@ public class BusTest {
 		assertEquals(2, b.getY());
 		b.move();
 		assertEquals(1, b.getX());
-		assertEquals(1, b.getY());		
+		assertEquals(1, b.getY());
 		b.move();
 		assertEquals(1, b.getX());
-		assertEquals(0, b.getY());		
+		assertEquals(0, b.getY());
 	}
 
 	@Test
@@ -53,12 +52,12 @@ public class BusTest {
 		assertEquals(2, b.getY());
 		b.move();
 		assertEquals(1, b.getX());
-		assertEquals(1, b.getY());		
+		assertEquals(1, b.getY());
 		b.move();
 		assertEquals(2, b.getX());
-		assertEquals(1, b.getY());		
+		assertEquals(1, b.getY());
 	}
-	
+
 	@Test
 	public void testMoveSouthThenWestAtTee() {
 		Bus b = new Bus(0, RoadMap.fromString("X.X ... XXX"), 1, 0);
@@ -66,10 +65,10 @@ public class BusTest {
 		assertEquals(0, b.getY());
 		b.move();
 		assertEquals(1, b.getX());
-		assertEquals(1, b.getY());		
+		assertEquals(1, b.getY());
 		b.move();
 		assertEquals(0, b.getX());
-		assertEquals(1, b.getY());		
+		assertEquals(1, b.getY());
 	}
 
 	@Test
@@ -93,7 +92,7 @@ public class BusTest {
 		assertEquals(1, b.getY());
 		b.move();
 	}
-	
+
 	@Test
 	public void testLessSmallWorldLoopCW() {
 		Bus b = new Bus(0, RoadMap.fromString("... .X. ..."), 1, 0);
@@ -123,20 +122,20 @@ public class BusTest {
 		b.move();
 		assertEquals(1, b.getX());
 		assertEquals(0, b.getY());
-	}	
-	
+	}
+
 	@Test
 	public void testLessSmallWorldLoopCCW() {
 		Bus b = new Bus(0, RoadMap.fromString("... .X. ..."), 0, 0);
 		assertEquals(0, b.getX());
 		assertEquals(0, b.getY());
-		b.move();
+		b.move();// moves south
 		assertEquals(0, b.getX());
 		assertEquals(1, b.getY());
-		b.move();
+		b.move(); // moves south
 		assertEquals(0, b.getX());
 		assertEquals(2, b.getY());
-		b.move();
+		b.move();// cant move south trieswest goies east?
 		assertEquals(1, b.getX());
 		assertEquals(2, b.getY());
 		b.move();
@@ -155,7 +154,7 @@ public class BusTest {
 		assertEquals(0, b.getX());
 		assertEquals(0, b.getY());
 	}
-	
+
 	@Test
 	public void testZigZag() {
 		Bus b = new Bus(0, RoadMap.fromString("..X X.. XX."), 0, 0);

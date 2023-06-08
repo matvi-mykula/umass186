@@ -30,9 +30,7 @@ public class RoadMap {
 	 * 
 	 * For example, the string
 	 * 
-	 * "XXX 
-	 *  X.. 
-	 *  X.X"
+	 * 
 	 * 
 	 * (including whitespace!) creates a 3x3 map, where there is a short road
 	 * that travels north from the center of the bottom of the map, and then
@@ -74,6 +72,12 @@ public class RoadMap {
 	}
 
 	public boolean isRoad(int x, int y) {
+		if (x < 0 || y < 0) {
+			return false;
+		}
+		if (x >= xSize || y >= ySize) {
+			return false;
+		}
 		return isRoad[x][y];
 	}
 
