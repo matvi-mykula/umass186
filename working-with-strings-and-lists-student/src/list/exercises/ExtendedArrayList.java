@@ -9,19 +9,25 @@ import java.util.List;
 
 @SuppressWarnings("serial")
 public class ExtendedArrayList<E> extends ArrayList<E> {
-	
+
 	/**
 	 * Counts the number of elements in this list that are equal to e.
 	 * 
-	 * Uses .equals to check for equality. 
+	 * Uses .equals to check for equality.
 	 * 
 	 * @param e the element to count
 	 * @return the number of elements equal to e
 	 */
 	public int count(E e) {
-		return 0;
+		int count = 0;
+		for (E element : this) {
+			if (element.equals(e)) {
+				count++;
+			}
+		}
+		return count;
 	}
-	
+
 	/**
 	 * Rotates the list right n places.
 	 * 
@@ -38,19 +44,37 @@ public class ExtendedArrayList<E> extends ArrayList<E> {
 	 * @param n the distance to rotate the list right
 	 */
 	public void rotateRight(int n) {
-	}	
-	
+		if (this == null || this.size() < 2) {
+			// No need to perform the operation if the array is empty or has only one
+			// element
+			return;
+		}
+
+		for (int i = 0; i < n; i++) {
+			E last = this.get(this.size() - 1);
+			this.add(0, last);
+			this.remove(this.size() - 1);
+		}
+	}
+
 	/**
 	 * Intersperses e between each existing element of the list.
 	 * 
-	 * For example, given the list: "hey", "ho", "hi", if we intersperse "yo" we get:
+	 * For example, given the list: "hey", "ho", "hi", if we intersperse "yo" we
+	 * get:
 	 * "hey", "yo", "ho", "yo", "hi"
 	 * 
 	 * @param e the element to intersperse
 	 */
 	public void intersperse(E e) {
+		int size = this.size();
+		for (int i = 1; i < size; i += 2) {
+			this.add(i, e);
+			size++;
+
+		}
 	}
-	
+
 	/**
 	 * Returns a copy of this list in reverse order.
 	 * 
@@ -59,6 +83,14 @@ public class ExtendedArrayList<E> extends ArrayList<E> {
 	 * @return a reversed copy of the list
 	 */
 	public List<E> reversed() {
-		return null;
+		List<E> list = new ArrayList<>(this.size());
+
+		int size = this.size();
+		for (int i = size - 1; i >= 0; i--) {
+			E element = this.get(i);
+			list.add(element);
+
+		}
+		return list;
 	}
 }
