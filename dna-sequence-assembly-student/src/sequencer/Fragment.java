@@ -92,9 +92,7 @@ public class Fragment {
 	 */
 	public int calculateOverlap(Fragment f) {
 		// assumes this.mnucleotides is the shorter string
-		System.out.println("calc");
-		System.out.println(this.nucleotides);
-		System.out.println(f.nucleotides);
+
 		int maxLength = Math.min(this.nucleotides.length(), f.nucleotides.length());
 
 		int size = 0;
