@@ -16,7 +16,7 @@ import java.util.List;
 public class Course {
 	private String courseNumber;
 	private int capacity;
-	private List<Student> roster;
+	public List<Student> roster;
 
 	/**
 	 * Instantiates a new Course object. The course number must be non-empty, and
@@ -61,6 +61,11 @@ public class Course {
 		return x;
 	}
 
+	// remove student from course
+	public void removeStudent(Student student) {
+		this.roster.remove(student);
+	}
+
 	/**
 	 * Returns the list of students enrolled in the course.
 	 * 
@@ -72,5 +77,24 @@ public class Course {
 	public List<Student> getRoster() {
 		List<Student> x = this.roster;
 		return x;
+	}
+
+	// check if course is not full
+	public boolean checkCapacity() {
+		if (this.getRoster().size() >= this.getCapacity()) {
+			return false;
+		}
+		return true;
+	}
+
+	// check if specific student is in course
+	// return true if student is not in class
+	public boolean checkEnrollment(Student student) {
+
+		if (this.getRoster().contains(student)) {
+			return false;
+		}
+		return true;
+
 	}
 }

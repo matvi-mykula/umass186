@@ -16,8 +16,8 @@ import java.util.List;
 public class Student {
 	private String name;
 	private int maxCourses;
-	List<Course> preferences;
-	List<Course> schedule;
+	private List<Course> preferences;
+	public List<Course> schedule;
 
 	/**
 	 * 
@@ -97,5 +97,25 @@ public class Student {
 	public List<Course> getSchedule() {
 
 		return new ArrayList<>(this.schedule);
+	}
+
+	// remove course from schedule
+	public void removeCourse(Course course) {
+		this.schedule.remove(course);
+	}
+
+	public boolean checkAvailability() {
+		if (this.getMaxCourses() == this.getSchedule().size()) {
+			return false;
+		}
+		return true;
+	}
+
+	// is course in preferences
+	public boolean isCourseInPreferences(Course course) {
+		if (!this.preferences.contains(course)) {
+			return false;
+		}
+		return true;
 	}
 }
