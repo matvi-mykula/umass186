@@ -57,99 +57,78 @@ public class Assembler {
 	 * 
 	 * @return true iff an assembly was performed
 	 */
+
+	// from assn...you can compare every fragment against every other (in both
+	// orders) and find the pair with the largest overlap. What do we mean by both
+	// orders? Consider each fragment as both a left fragment against every other on
+	// its right, and a right fragment against every other on its left.
+	// im assuming this means [a,b,c,d] you can try to overlap a-d
+
 	public boolean assembleOnce() {
+
 		List<Fragment> fragments = this.getFragments();
-
-		if (fragments.size() >= 2) {
-			System.out.println(fragments);
-			int indexer = 0;
-			int largestOverlap = 0;
-
-			for (int i = 0; i <= fragments.size() - 1; i++) {
-				int overlap;
-				if (i == fragments.size() - 1) { /// special case to check if fragment at end and beigning overlap
-					overlap = fragments.get(i).calculateOverlap(fragments.get(0));
-
-					if (overlap > largestOverlap) {
-						indexer = i;
-						largestOverlap = overlap;
-					} else if (overlap == largestOverlap && overlap > 0) {
-						Fragment merged1 = fragments.get(indexer).mergedWith(fragments.get(indexer + 1));
-						Fragment merged2 = fragments.get(i).mergedWith(fragments.get(0));
-						if (merged2.length() < merged1.length()) {
-							indexer = i;
-						}
-					}
-
-				} else {
-					overlap = fragments.get(i).calculateOverlap(fragments.get(i + 1));
-
-					if (overlap == largestOverlap && overlap > 0) {
-						Fragment merged1 = fragments.get(indexer).mergedWith(fragments.get(indexer + 1));
-						Fragment merged2 = fragments.get(i).mergedWith(fragments.get(i + 1));
-						if (merged2.length() < merged1.length()) {
-							indexer = i;
-						}
-					} else if (overlap > largestOverlap) {
-						indexer = i;
-						largestOverlap = overlap;
-					}
-				}
-			}
-			if (largestOverlap >= 1) {
-				Fragment fragment1 = fragments.get(indexer);
-				Fragment fragment2;
-				fragment2 = (indexer == (fragments.size() - 1)) ? fragments.get(0) : fragments.get(indexer + 1);
-				// Fragment fragment2 = fragments.get(indexer + 1);
-				Fragment mergedFragment = fragment1.mergedWith(fragment2);
-				System.out.println(mergedFragment.toString());
-				System.out.println(fragments);
-				System.out.println(fragment1.toString());
-				System.out.println(fragment2.toString());
-
-				fragments.add(indexer, mergedFragment);
-				Iterator<Fragment> iterator = fragments.iterator();
-				while (iterator.hasNext()) {
-					Fragment fragment = iterator.next();
-					if (fragment.equals(fragment1) || fragment.equals(fragment2)) {
-						System.out.println(fragment);
-						iterator.remove();
-					}
-				}
-
-				this.fragments = fragments;
-				// this.Assembler(fragments);
-				System.out.println(this.fragments);
-				return true;
-			} else {
-				return false;
-			}
-
-		} else {
-			System.out.println("just one");
-
+		if (fragments.size() < 2) {
 			return false;
 		}
+		int indexLeft = 0;
+		int indexRight = 1;
+		int largestOverlap = 0;
+
+		// compare each element to every element to the right of it
+		for (int i = 0; i < fragments.size(); i++) {
+			Fragment leftFrag = fragments.get(i);
+			for (int j = 0; j < fragments.size(); j++) {
+				if (j == i) {
+					continue;
+				}
+
+				Fragment rightFrag = fragments.get(j);
+				int overlap = leftFrag.calculateOverlap(rightFrag);
+				if (overlap > 0 && overlap == largestOverlap) {
+					Fragment merged1 = fragments.get(indexLeft).mergedWith(fragments.get(indexRight));
+					Fragment merged2 = fragments.get(i).mergedWith(fragments.get(j));
+					if (merged2.length() < merged1.length()) {
+						indexLeft = i;
+						indexRight = j;
+					}
+
+				} else if (overlap > largestOverlap) {
+					indexLeft = i;
+					indexRight = j;
+					largestOverlap = overlap;
+				}
+			}
+		}
+		if (largestOverlap == 0) {
+			return false;
+		}
+
+		Fragment mergedFragment = fragments.get(indexLeft).mergedWith(fragments.get(indexRight));
+		List<Fragment> newFragments = new ArrayList<>();
+		for (int i = 0; i < fragments.size(); i++) {
+			if (i == indexLeft || i == indexRight) {
+				continue;
+			} else {
+				newFragments.add(fragments.get(i)); // with or without index??
+			}
+
+		}
+		newFragments.add(mergedFragment); /// why is this showing up as out of bounds?
+
+		this.fragments = newFragments;
+		return true;
+
 	}
 
 	/**
 	 * Repeatedly assembles fragments until no more assembly can occur.
 	 */
 	public void assembleAll() {
+
+		while (this.assembleOnce()) {
+			this.assembleOnce();
+		}
+
 	}
 
-	// public static void main(String[] args) {
-	// // Code to be executed
-	// // private List<Fragment> two;
-
-	// ArrayList two = new ArrayList<Fragment>();
-	// two.add(new Fragment("CATG"));
-	// two.add(new Fragment("GCAT"));
-	// Assembler a = new Assembler(two);
-	// a.assembleOnce();
-	// String A = a.toString();
-
-	// System.out.println(A);
-
-	// }
 }

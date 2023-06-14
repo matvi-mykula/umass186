@@ -103,43 +103,42 @@ public class AssemblerTest {
 		assertEquals(Arrays.asList(new Fragment("AAGAA")), a.getFragments());
 	}
 
-	// @Test
-	// public void testCorrectThreeAssembleStepwise() {
-	// Assembler a = new Assembler(three);
-	// assertEquals(3, a.getFragments().size());
-	// assertTrue(a.assembleOnce());
-	// assertEquals(2, a.getFragments().size());
-	// assertTrue(a.assembleOnce());
-	// assertEquals(1, a.getFragments().size());
-	// assertFalse(a.assembleOnce());
-	// assertEquals(1, a.getFragments().size());
-	// assertEquals(Arrays.asList(new Fragment("ACACACTGTGGG")), a.getFragments());
-	// }
+	@Test
+	public void testCorrectThreeAssembleStepwise() {
+		Assembler a = new Assembler(three);
+		assertEquals(3, a.getFragments().size());
+		assertTrue(a.assembleOnce());
+		assertEquals(2, a.getFragments().size());
+		assertTrue(a.assembleOnce());
+		assertEquals(1, a.getFragments().size());
+		assertFalse(a.assembleOnce());
+		assertEquals(1, a.getFragments().size());
+		assertEquals(Arrays.asList(new Fragment("ACACACTGTGGG")), a.getFragments());
+	}
 
-	// @Test
-	// public void testCorrectThreeAssembleAll() {
-	// Assembler a = new Assembler(three);
-	// a.assembleAll();
-	// assertEquals(Arrays.asList(new Fragment("ACACACTGTGGG")), a.getFragments());
-	// }
+	@Test
+	public void testCorrectThreeAssembleAll() {
+		Assembler a = new Assembler(three);
+		a.assembleAll();
+		assertEquals(Arrays.asList(new Fragment("ACACACTGTGGG")), a.getFragments());
+	}
 
-	// @Test
-	// public void testConstructorArgumentUnharmed() {
-	// List<Fragment> copy = new ArrayList<Fragment>(three);
-	// Assembler a = new Assembler(three);
-	// a.assembleOnce();
-	// assertEquals(copy, three);
-	// }
+	@Test
+	public void testConstructorArgumentUnharmed() {
+		List<Fragment> copy = new ArrayList<Fragment>(three);
+		Assembler a = new Assembler(three);
+		a.assembleOnce();
+		assertEquals(copy, three);
+	}
 
-	// @Test
-	// public void testTiebreaker() {
-	// List<Fragment> l = new ArrayList<Fragment>(Arrays.asList(new
-	// Fragment("GGGAAAC"), new Fragment("AAACGGG"),
-	// new Fragment("CCCGTTTA"), new Fragment("TTTAGCCC")));
-	// Assembler a = new Assembler(l);
-	// a.assembleOnce();
-	// assertTrue(a.getFragments().contains(new Fragment("GGGAAACGGG")));
-	// }
+	@Test
+	public void testTiebreaker() {
+		List<Fragment> l = new ArrayList<Fragment>(Arrays.asList(new Fragment("GGGAAAC"), new Fragment("AAACGGG"),
+				new Fragment("CCCGTTTA"), new Fragment("TTTAGCCC")));
+		Assembler a = new Assembler(l);
+		a.assembleOnce();
+		assertTrue(a.getFragments().contains(new Fragment("GGGAAACGGG")));
+	}
 
 	// @Test
 	// public void testThreeCorrectAssembleOrder() {
