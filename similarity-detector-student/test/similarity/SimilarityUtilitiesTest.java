@@ -15,10 +15,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.Timeout;
 
-
 public class SimilarityUtilitiesTest {
-//	@Rule
-//	public Timeout globalTimeout = Timeout.seconds(10); // 10 seconds
+
+	// @Rule
+	// public Timeout globalTimeout = Timeout.seconds(10); // 10 seconds
 
 	String simple = "Apple  \n   Banana  \n Clementine Durian\n";
 	String lessSimple = "\nApple  \n \n  Banana  \n\n Clementine Durian\n";
@@ -30,7 +30,10 @@ public class SimilarityUtilitiesTest {
 	String bad = "Complete the following sentence:\nCOMPSCI 290NW is a hot mess.\n";
 	String containsEmpty = "Complete the following sentence:\nCOMPSCI 290NW is ...\n\nThat's a tricky one.\n\nI'm not sure how I'd answer that question.\n";
 
-	/* Alvin Kernan, The Playwright as Magician. New Haven: Yale University Press, 1979. pp. 102–103. */
+	/*
+	 * Alvin Kernan, The Playwright as Magician. New Haven: Yale University Press,
+	 * 1979. pp. 102–103.
+	 */
 	String kernan = "From time to time this submerged or latent theater in Hamlet becomes almost overt. It is close to the surface in Hamlet’s pretense of madness, the “antic disposition” he puts on to protect himself and prevent his antagonists from plucking out the heart of his mystery. It is even closer to the surface when Hamlet enters his mother’s room and holds up, side by side, the pictures of the two kings, Old Hamlet and Claudius, and proceeds to describe for her the true nature of the choice she has made, presenting truth by means of a show. Similarly, when he leaps into the open grave at Ophelia’s funeral, ranting in high heroic terms, he is acting out for Laertes, and perhaps for himself as well, the folly of excessive, melodramatic expressions of grief.";
 
 	@Before
@@ -224,12 +227,12 @@ public class SimilarityUtilitiesTest {
 	public void testPhraseSimilarityGoodContainsEmptyTemplate() {
 		assertEquals(0.0, SimilarityUtilities.shingleSimilarity(good, containsEmpty, template, 3), 0.0);
 	}
-	
+
 	/*
 	 * The following three examples are taken from Princeton University's
 	 * Academic Integrity web site
 	 */
-	
+
 	@Test
 	public void testPhraseSimilarityVerbatim() {
 		String text2 = "Almost all of Shakespeare’s Hamlet can be understood as a play about acting and the theater. For example, there is Hamlet’s pretense of madness, the “antic disposition” that he puts on to protect himself and prevent his antagonists from plucking out the heart of his mystery. When Hamlet enters his mother’s room, he holds up, side by side, the pictures of the two kings, Old Hamlet and Claudius, and proceeds to describe for her the true nature of the choice she has made, presenting truth by means of a show. Similarly, when he leaps into the open grave at Ophelia’s funeral, ranting in high heroic terms, he is acting out for Laertes, and perhaps for himself as well, the folly of excessive, melodramatic expressions of grief.";
