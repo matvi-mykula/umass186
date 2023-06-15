@@ -72,7 +72,7 @@ public class Scheduler {
 	/// classes left are not in students preffered list
 	// if so return false
 	public boolean checkIfAssigningToDo() {
-
+		boolean continueAssigning = false;
 		List<Course> courses = this.getCourses();
 		// for (Course course : courses) {
 		// if (course.checkCapacity()) {
@@ -86,14 +86,15 @@ public class Scheduler {
 		for (Student student : students) {
 			if (student.checkAvailability()) { // if student can still enroll in classes
 				for (Course course : courses) {
-					if (course.checkCapacity() && student.isCourseInPreferences(course)) { // if there is a preffered
-																							// class that has capacity
-						return true;
+					if (course.checkCapacity() && student.isCourseInPreferences(course)
+							&& course.checkEnrollment(student)) { // if there is a preffered
+						// class that has capacity
+						continueAssigning = true;
 					}
 				}
 			}
 		}
-		return false;
+		return continueAssigning;
 	}
 
 	/**
@@ -133,19 +134,27 @@ public class Scheduler {
 			for (int i = 0; i < students.size(); i++) {
 				/// check if studnet is at maxcourseload
 				if (students.get(i).checkAvailability()) {
-					// try to assign preferences, if class is full or student already in class
 					Student student = students.get(i);
 					List<Course> preferences = student.getPreferences();
 
+					// iterated thorugh this students preferences and assigning if the course isnt
+					// full
+					// and the student isnt already enrolled
 					for (Course course : preferences) {
-						if (course.checkCapacity() && course.checkEnrollment(student)
-								&& student.isCourseInPreferences(course)) {// class is not full and student
+						if (course.checkCapacity() && course.checkEnrollment(student) && student.checkAvailability()) {// class
+																														// is
+																														// not
+																														// full
+																														// and
+																														// student
 							// is
-							// not already in it && class is
 							// in students preferences
-							// add student to course altering state
+							// add student to course
+							// altering state
 							course.roster.add(student);
 							student.schedule.add(course);
+							// if course added then continue to next student with break
+							break;
 
 						}
 
@@ -191,35 +200,44 @@ public class Scheduler {
 	 *                                  scheduler
 	 */
 	public void unenroll(Student student) throws IllegalArgumentException {
+
+		if (!this.Students.contains(student)) {
+			throw new IllegalArgumentException("Not a Student");
+
+		}
+		/// go through courses in student.schedule and for each of them remove student
+		List<Course> courses = student.schedule;
+		for (Course course : courses) {
+			course.removeStudent(student);
+		}
+		// clear student scheudle
+		student.schedule = new ArrayList<>();
+
 	}
 
 	public static void main(String[] args) {
-
-		// Course courseOne = new Course("ONE1", 1);
-		// List<Course> l = new ArrayList<>();
-		// l.add(courseOne);
-		// Student studentOne = new Student("one", 1, l);
-		// Scheduler singleScheduler = new Scheduler();
-		// singleScheduler.addStudent(studentOne);
-		// singleScheduler.addCourse(courseOne);
-
-		// List<Course> m = singleScheduler.getCourses();
-		// m.clear();
-		// singleScheduler.getCourses().contains(courseOne);
 
 		Scheduler scheduler = new Scheduler();
 		Course a = new Course("ANTHRO100", 2);
 		Course b = new Course("BIO100", 2);
 
-		List<Course> listA = Arrays.asList(new Course[] { a });
+		List<Course> listAB = Arrays.asList(new Course[] { a, b });
 
-		Student s = new Student("s", 1, listA);
+		Student s = new Student("s", 1, listAB);
+		int x = s.getMaxCourses();
+		System.out.println(x);
+		System.out.println(s.checkAvailability());
 		List<Student> listS = Arrays.asList(new Student[] { s });
 
 		scheduler.addStudent(s);
+		scheduler.addCourse(a);
+		boolean bool = a.checkCapacity();
+		boolean bool2 = a.checkEnrollment(s);
 		scheduler.addCourse(b);
 		scheduler.assignAll();
 		int roster = a.getRoster().size();
+		List<Course> schedule = s.getSchedule();
+		System.out.println(schedule);
 		System.out.println(roster);
 
 	}

@@ -353,7 +353,7 @@ public class SchedulerTest {
 
 		checkList(Arrays.asList(new Student[] { s, t, u }), scheduler.getStudents());
 		checkList(Arrays.asList(new Course[] { a, b, c, d, e }), scheduler.getCourses());
-		checkList(Arrays.asList(new Student[] { s, t }), a.getRoster());
+		checkList(Arrays.asList(new Student[] { s, t }), a.getRoster());// a got full after 2
 		checkList(Arrays.asList(new Student[] { u, s }), b.getRoster());
 		assertEquals(Arrays.asList(new Student[] { t }), c.getRoster());
 		checkList(Arrays.asList(new Student[] { u, s }), d.getRoster());
