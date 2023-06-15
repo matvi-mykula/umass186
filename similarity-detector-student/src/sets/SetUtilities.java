@@ -56,7 +56,18 @@ public class SetUtilities {
 	 * @return a new set representing the difference of s and t
 	 */
 	public static <E> Set<E> setDifference(Set<E> s, Set<E> t) {
-		return null;
+		Set<E> differenceSet = new LinkedHashSet<>();
+		for (E e : s) {
+			if (!t.contains(e)) {
+				differenceSet.add(e);
+			}
+		}
+		// for (E e : t) {
+		// if (!s.contains(e)) {
+		// differenceSet.add(e);
+		// }
+		// }
+		return differenceSet;
 	}
 
 	/**
@@ -74,6 +85,17 @@ public class SetUtilities {
 	 * @return the Jaccard index of s and t
 	 */
 	public static <E> double jaccardIndex(Set<E> s, Set<E> t) {
-		return -1.0;
+		if (s.size() == 0 && t.size() == 0) {
+			return 1;
+		}
+		Set<E> intersectionSet = intersection(s, t);
+		Set<E> unionSet = union(s, t);
+
+		double unionSize = unionSet.size();
+		double interSize = intersectionSet.size();
+
+		double jaccardIndex = interSize / unionSize;
+
+		return jaccardIndex;
 	}
 }
