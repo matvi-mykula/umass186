@@ -134,7 +134,22 @@ public class SimilarityUtilities {
 	 * @return
 	 */
 	public static Set<String> shingle(List<String> words, int shingleLength) {
-		return null;
+
+		// instantiate shingle set of strings
+		Set<String> shingleSet = new LinkedHashSet<>();
+
+		// for each word in words until end with room for last shingle
+		for (int i = 0; i < words.size() - (shingleLength - 1); i++) {
+			String tempString = "";
+			for (int j = i; j < i + shingleLength; j++) {
+				tempString += words.get(j);
+			}
+			shingleSet.add(tempString);
+		}
+		// create a string by adding shinglelength words
+		// add that to set
+
+		return shingleSet;
 	}
 
 	/**
@@ -155,6 +170,42 @@ public class SimilarityUtilities {
 	 * @return
 	 */
 	public static double shingleSimilarity(String text1, String text2, String templateText, int shingleLength) {
-		return -1.0;
+		// trim and lowwercase texts
+		Set<String> Set1 = trimmedLines(text1);
+		List<String> List1 = new ArrayList<>();
+		Set<String> Set2 = trimmedLines(text2);
+		List<String> List2 = new ArrayList<>();
+		Set<String> templateSet = trimmedLines(templateText);
+		List<String> templateList = new ArrayList<>();
+
+		for (String string : Set1) {
+			List1.addAll(asLowercaseWords(string));
+
+		}
+		for (String string : Set2) {
+			List2.addAll(asLowercaseWords(string));
+		}
+		for (String string : templateSet) {
+			templateList.addAll(asLowercaseWords(string));
+		}
+		// shingle them
+		Set<String> shingle1 = shingle(List1, shingleLength);
+		Set<String> shingle2 = shingle(List2, shingleLength);
+		Set<String> templateShingle = shingle(templateList, shingleLength);
+
+		// remove templates
+		shingle1.removeAll(templateShingle);
+		shingle2.removeAll(templateShingle);
+		// get union
+
+		double jaccard = SetUtilities.jaccardIndex(shingle1, shingle2);
+
+		return jaccard;
+	}
+
+	public static void main(String[] args) {
+		String good = "Complete the following sentence:\nCOMPSCI 290NW is a perfectly cromulent class.\n";
+		String bad = "Complete the following sentence:\nCOMPSCI 290NW is a hot mess.\n";
+		shingleSimilarity(bad, good, "", 0);
 	}
 }
