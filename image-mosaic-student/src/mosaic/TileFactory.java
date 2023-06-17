@@ -104,13 +104,19 @@ public class TileFactory {
 
 		int avgHue = ImageUtils.averageHue(image);
 
-		List<BufferedImage> list = hueImageMap.get(avgHue);
+		/// should add to closest hue in map
+		int closest = closestHue(avgHue);
+		List<BufferedImage> list = hueImageMap.get(closest);
 		// TODO: add the image to the appropriate place in your map from hues to lists
 		// of images
+
 		if (list.size() == 0 || list == null) {
 			list = new ArrayList<>(Arrays.asList(image));
+			hueImageMap.put(closest, list);
 		} else {
 			list.add(image);
+			hueImageMap.put(closest, list);
+
 		}
 	}
 
@@ -129,10 +135,12 @@ public class TileFactory {
 	public BufferedImage getTile(int hue) {
 		// TODO: return an appropriate image from your map of hues to lists of images;
 		// see assignment description for details
+		// get closest key to hue
+		int closest = closestHue(hue);
 
 		// get list of images by the hue key
-		List<BufferedImage> list = hueImageMap.get(hue);
-		if (list.size() == 0) {
+		List<BufferedImage> list = hueImageMap.get(closest);
+		if (list == null || list.size() == 0) {
 			return null;
 		}
 		// pull out index 0
