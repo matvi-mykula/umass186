@@ -7,6 +7,8 @@ package index;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -45,6 +47,7 @@ import documents.DocumentId;
 public class SearchEngine {
 
 	Map<String, Set<DocumentId>> termsToDocIds = new HashMap<String, Set<DocumentId>>();
+	Map<DocumentId, Map<String, Integer>> stringCountsByDoc = new HashMap<DocumentId, Map<String, Integer>>();
 
 	/**
 	 * Inserts a document into the search engine for later analysis and retrieval.
@@ -64,6 +67,7 @@ public class SearchEngine {
 	public void addDocument(DocumentId documentId, Reader reader) throws IOException {
 		BufferedReader br = new BufferedReader(reader);
 		Set<DocumentId> documentIds = new HashSet<>();
+		Map<String, Integer> termCountMap = new HashMap<>(); /// counts occurences of each term in document
 
 		for (String line = br.readLine(); line != null; line = br.readLine()) {
 			String[] terms = line.split("\\W+");
@@ -74,6 +78,14 @@ public class SearchEngine {
 					termsToDocIds.put(term, new HashSet<>());
 				}
 				termsToDocIds.get(term).add(documentId);
+				if (termCountMap.containsKey(term)) {
+					termCountMap.put(term, termCountMap.get(term) + 1);
+				} else {
+					termCountMap.put(term, 1);
+				}
+				// termCountMap.put(term, termsToDocIds.get(term).size());
+
+				stringCountsByDoc.put(documentId, termCountMap);
 			}
 		}
 	}
@@ -102,7 +114,24 @@ public class SearchEngine {
 	 * @throws IllegalArgumentException if the documentId has not been added to the
 	 *                                  engine
 	 */
+
 	public int termFrequency(DocumentId documentId, String term) throws IllegalArgumentException {
+		if (documentId == null) {
+			throw new IllegalArgumentException("Invalid documentId");
+		}
+		// Check if the documentId has been added to the engine
+		if (!stringCountsByDoc.containsKey(documentId)) {
+			throw new IllegalArgumentException("Document not found");
+		}
+
+		if (stringCountsByDoc.containsKey(documentId)) {
+
+			Map<String, Integer> termCounts = stringCountsByDoc.get(documentId);
+			if (termCounts.containsKey(term)) {
+				return termCounts.get(term);
+			}
+		}
+
 		return 0;
 	}
 
@@ -118,7 +147,36 @@ public class SearchEngine {
 	 * @return the inverse document frequency of term
 	 */
 	public double inverseDocumentFrequency(String term) {
-		return 0.0;
+
+		// N is total number of documents
+		double N = stringCountsByDoc.size();
+
+		// m is number of documents that have that term in it
+		/// initialize m at 0
+		double M = 0;
+		// get list of documents
+		for (Map.Entry<DocumentId, Map<String, Integer>> entry : stringCountsByDoc.entrySet()) {
+			DocumentId documentId = entry.getKey();
+			Map<String, Integer> termCounts = entry.getValue();
+			// if (stringCountsByDoc.get(documentId).containsValue(term))
+
+			System.out.println("Document ID: " + documentId);
+
+			// go through each term in each document
+			for (Map.Entry<String, Integer> termEntry : termCounts.entrySet()) {
+				String termKey = termEntry.getKey();
+				int count = termEntry.getValue();
+				// if term shows up count it
+				if (termKey.equals(term) && count > 0) {
+					M += 1;
+				}
+
+				System.out.println("Term: " + term + ", Count: " + count);
+			}
+		}
+
+		double IDF = Math.log((1 + N) / (1 + M));
+		return IDF;
 	}
 
 	/**
@@ -134,7 +192,18 @@ public class SearchEngine {
 	 *                                  engine
 	 */
 	public double tfIdf(DocumentId documentId, String term) throws IllegalArgumentException {
-		return 0.0;
+
+		if (!stringCountsByDoc.keySet().contains(documentId)) {
+			throw new IllegalArgumentException("No Document");
+		}
+		// get term frequency
+		double tf = termFrequency(documentId, term);
+		// get inverse document frequency for term and document
+		double idf = inverseDocumentFrequency(term);
+
+		double product = tf * idf;
+
+		return product;
 	}
 
 	/**
@@ -150,6 +219,42 @@ public class SearchEngine {
 	 * @return a list of documents sorted in descending order by tfidf
 	 */
 	public List<DocumentId> relevanceLookup(String term) {
-		return null;
+		// get documents with the term
+		List<DocumentId> docWithTerm = new ArrayList<>();
+
+		for (Map.Entry<DocumentId, Map<String, Integer>> entry : stringCountsByDoc.entrySet()) {
+			DocumentId documentId = entry.getKey();
+			Map<String, Integer> termCounts = entry.getValue();
+			// if (stringCountsByDoc.get(documentId).containsValue(term))
+
+			// go through each term in each document
+			for (Map.Entry<String, Integer> termEntry : termCounts.entrySet()) {
+				String termKey = termEntry.getKey();
+				int count = termEntry.getValue();
+				// if term shows up count it
+				if (termKey.equals(term) && count > 0) {
+					docWithTerm.add(documentId);
+					continue;
+				}
+
+			}
+
+		}
+		// sort into list with higher scores first
+		Map<DocumentId, Double> docToTfidfMap = new HashMap<>(); /// counts occurences of each term in document
+		for (DocumentId documentId : docWithTerm) {
+			docToTfidfMap.put(documentId, tfIdf(documentId, term));
+		}
+		// create map {document:tfidf score}
+		List<Map.Entry<DocumentId, Double>> entryList = new ArrayList<>(docToTfidfMap.entrySet());
+		entryList.sort(Map.Entry.comparingByValue(Comparator.reverseOrder()));
+
+		List<DocumentId> orderedKeys = new ArrayList<>();
+		for (Map.Entry<DocumentId, Double> entry : entryList) {
+			orderedKeys.add(entry.getKey());
+		}
+
+		return orderedKeys;
+
 	}
 }

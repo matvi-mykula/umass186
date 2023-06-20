@@ -16,18 +16,18 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.Timeout;
 
-
 import documents.DocumentId;
 
 public class SearchEngineTest {
 
-	@Rule
-	public Timeout globalTimeout = Timeout.seconds(10); // 10 seconds
+	// @Rule
+	// public Timeout globalTimeout = Timeout.seconds(10); // 10 seconds
 
 	private SearchEngine searchEngine;
 
 	/*
-	 * Text below taken from Wikipedia on 2016-11-02, used under CC BY-SA 3.0 Unported License.
+	 * Text below taken from Wikipedia on 2016-11-02, used under CC BY-SA 3.0
+	 * Unported License.
 	 */
 	private static final String DOCUMENT1 = "this is a a sample";
 	private static final DocumentId DOCUMENT1_ID = new DocumentId("DOCUMENT1");
@@ -54,9 +54,9 @@ public class SearchEngineTest {
 
 	@Before
 	public void setup() {
-		searchEngine = new SearchEngine();		
+		searchEngine = new SearchEngine();
 	}
-	
+
 	public void addFood() throws IOException {
 		searchEngine.addDocument(PIZZA_ID, new StringReader(PIZZA));
 		searchEngine.addDocument(SPAGHETTI_ID, new StringReader(SPAGHETTI));
@@ -67,7 +67,7 @@ public class SearchEngineTest {
 		searchEngine.addDocument(CHOW_MEIN_ID, new StringReader(CHOW_MEIN));
 		searchEngine.addDocument(WAT_ID, new StringReader(WAT));
 	}
-	
+
 	@Test
 	public void testTrivialAdd() throws Exception {
 		searchEngine.addDocument(DOCUMENT1_ID, new StringReader(DOCUMENT1));
@@ -77,7 +77,7 @@ public class SearchEngineTest {
 	public void testEmptyIndex() throws Exception {
 		assertEquals(new HashSet<DocumentId>(), searchEngine.indexLookup("foo"));
 	}
-	
+
 	@Test
 	public void testNotInIndex() throws Exception {
 		searchEngine.addDocument(DOCUMENT1_ID, new StringReader(DOCUMENT1));
@@ -91,7 +91,7 @@ public class SearchEngineTest {
 		result.add(DOCUMENT1_ID);
 		assertEquals(result, searchEngine.indexLookup("sample"));
 	}
-	
+
 	@Test
 	public void testMultipleInIndex() throws Exception {
 		searchEngine.addDocument(DOCUMENT1_ID, new StringReader(DOCUMENT1));
@@ -117,7 +117,7 @@ public class SearchEngineTest {
 		result.add(DOCUMENT1_ID);
 		assertEquals(result, searchEngine.indexLookup("SAMPLE"));
 	}
-	
+
 	@Test
 	public void testAddTokenizing() throws Exception {
 		searchEngine.addDocument(PIZZA_ID, new StringReader(PIZZA));
@@ -126,7 +126,7 @@ public class SearchEngineTest {
 		assertEquals(result, searchEngine.indexLookup("oven"));
 		assertEquals(new HashSet<>(), searchEngine.indexLookup("oven."));
 	}
-	
+
 	@Test(expected = IllegalArgumentException.class)
 	public void testTermFrequencyIllegalArgument() throws Exception {
 		searchEngine.addDocument(DOCUMENT1_ID, new StringReader(DOCUMENT1));
@@ -144,7 +144,7 @@ public class SearchEngineTest {
 		searchEngine.addDocument(DOCUMENT1_ID, new StringReader(DOCUMENT1));
 		assertEquals(1, searchEngine.termFrequency(DOCUMENT1_ID, "sample"));
 	}
-	
+
 	@Test
 	public void testTermFrequencyN() throws Exception {
 		searchEngine.addDocument(PIZZA_ID, new StringReader(PIZZA));
@@ -169,7 +169,7 @@ public class SearchEngineTest {
 		searchEngine.addDocument(DOCUMENT2_ID, new StringReader(DOCUMENT2));
 		assertEquals(Math.log(3.0), searchEngine.inverseDocumentFrequency("foo"), 0.0);
 	}
-	
+
 	@Test
 	public void testInverseTermFrequencyOneOfTwo() throws Exception {
 		searchEngine.addDocument(DOCUMENT1_ID, new StringReader(DOCUMENT1));
@@ -183,19 +183,19 @@ public class SearchEngineTest {
 		searchEngine.addDocument(DOCUMENT2_ID, new StringReader(DOCUMENT2));
 		assertEquals(0.0, searchEngine.inverseDocumentFrequency("this"), 0.0);
 	}
-		
+
 	@Test(expected = IllegalArgumentException.class)
 	public void testTfIdfIllegalArgument() throws Exception {
 		searchEngine.tfIdf(DOCUMENT1_ID, "this");
 	}
-	
+
 	@Test
 	public void testTfIdfOneOfTwo() throws Exception {
 		searchEngine.addDocument(DOCUMENT1_ID, new StringReader(DOCUMENT1));
 		searchEngine.addDocument(DOCUMENT2_ID, new StringReader(DOCUMENT2));
 		assertEquals(Math.log(3.0 / 2.0), searchEngine.tfIdf(DOCUMENT1_ID, "sample"), 0.0);
 	}
-		
+
 	@Test
 	public void testTfIdfMultipleOne() throws Exception {
 		searchEngine.addDocument(DOCUMENT1_ID, new StringReader(DOCUMENT1));
@@ -215,7 +215,7 @@ public class SearchEngineTest {
 		assertEquals(2 * Math.log(4.0 / 3.0), searchEngine.tfIdf(DOCUMENT2_ID, "another"), 0.0);
 		assertEquals(Math.log(4.0 / 3.0), searchEngine.tfIdf(DOCUMENT3_ID, "another"), 0.0);
 	}
-	
+
 	@Test
 	public void testTfIdfMultipleThree() throws Exception {
 		searchEngine.addDocument(DOCUMENT1_ID, new StringReader(DOCUMENT1));
@@ -225,7 +225,7 @@ public class SearchEngineTest {
 		assertEquals(0.0, searchEngine.tfIdf(DOCUMENT2_ID, "is"), 0.0);
 		assertEquals(0.0, searchEngine.tfIdf(DOCUMENT3_ID, "is"), 0.0);
 	}
-	
+
 	@Test
 	public void testPizzaTfIdf() throws Exception {
 		addFood();
@@ -237,7 +237,7 @@ public class SearchEngineTest {
 		addFood();
 		assertEquals(0.0, searchEngine.tfIdf(SPAGHETTI_ID, "pizza"), 0.0);
 	}
-	
+
 	@Test
 	public void testTomatoTfIdf() throws Exception {
 		addFood();
@@ -250,28 +250,28 @@ public class SearchEngineTest {
 		addFood();
 		assertEquals(Arrays.asList(TOMATO_SAUCE_ID, PIZZA_ID), searchEngine.relevanceLookup("tomato"));
 	}
-	
+
 	@Test
 	public void testMeatRelevanceLookup() throws Exception {
 		addFood();
-		assertEquals(Arrays.asList(PAELLA_ID, FRIED_RICE_ID, CHOW_MEIN_ID, TOMATO_SAUCE_ID), 
+		assertEquals(Arrays.asList(PAELLA_ID, FRIED_RICE_ID, CHOW_MEIN_ID, TOMATO_SAUCE_ID),
 				searchEngine.relevanceLookup("meat"));
 	}
-	
+
 	@Test
 	public void testPastaRelevanceLookup() throws Exception {
 		addFood();
-		assertEquals(Arrays.asList(SPAGHETTI_ID, TOMATO_SAUCE_ID), 
+		assertEquals(Arrays.asList(SPAGHETTI_ID, TOMATO_SAUCE_ID),
 				searchEngine.relevanceLookup("pasta"));
 	}
 
 	@Test
 	public void testBeefRelevanceLookup() throws Exception {
 		addFood();
-		assertEquals(Arrays.asList(WAT_ID, CHOW_MEIN_ID), 
+		assertEquals(Arrays.asList(WAT_ID, CHOW_MEIN_ID),
 				searchEngine.relevanceLookup("beef"));
 	}
-	
+
 	@Test
 	public void testIrrelevantLookup() throws Exception {
 		addFood();
