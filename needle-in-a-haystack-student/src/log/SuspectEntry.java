@@ -52,7 +52,8 @@ public class SuspectEntry implements Comparable<SuspectEntry> {
 				&& Objects.equals(this.passportNumber, other.passportNumber);
 	}
 
-	/// why did i need to write this to not have two identical entries get into the same set
+	/// why did i need to write this to not have two identical entries get into the
+	/// same set
 	@Override
 	public int hashCode() {
 		return Objects.hash(name, phoneNumber, passportNumber);

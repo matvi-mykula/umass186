@@ -220,12 +220,11 @@ public class SearchEngine {
 	 */
 	public List<DocumentId> relevanceLookup(String term) {
 		// get documents with the term
-		List<DocumentId> docWithTerm = new ArrayList<>();
+		List<DocumentId> docsWithTerm = new ArrayList<>();
 
 		for (Map.Entry<DocumentId, Map<String, Integer>> entry : stringCountsByDoc.entrySet()) {
 			DocumentId documentId = entry.getKey();
 			Map<String, Integer> termCounts = entry.getValue();
-			// if (stringCountsByDoc.get(documentId).containsValue(term))
 
 			// go through each term in each document
 			for (Map.Entry<String, Integer> termEntry : termCounts.entrySet()) {
@@ -233,7 +232,7 @@ public class SearchEngine {
 				int count = termEntry.getValue();
 				// if term shows up count it
 				if (termKey.equals(term) && count > 0) {
-					docWithTerm.add(documentId);
+					docsWithTerm.add(documentId);
 					continue;
 				}
 
@@ -241,14 +240,15 @@ public class SearchEngine {
 
 		}
 		// sort into list with higher scores first
+		// create map {document:tfidf score}
 		Map<DocumentId, Double> docToTfidfMap = new HashMap<>(); /// counts occurences of each term in document
-		for (DocumentId documentId : docWithTerm) {
+		for (DocumentId documentId : docsWithTerm) {
 			docToTfidfMap.put(documentId, tfIdf(documentId, term));
 		}
-		// create map {document:tfidf score}
+		// make sorted list of map entries
 		List<Map.Entry<DocumentId, Double>> entryList = new ArrayList<>(docToTfidfMap.entrySet());
 		entryList.sort(Map.Entry.comparingByValue(Comparator.reverseOrder()));
-
+		/// get keys into list in order
 		List<DocumentId> orderedKeys = new ArrayList<>();
 		for (Map.Entry<DocumentId, Double> entry : entryList) {
 			orderedKeys.add(entry.getKey());
