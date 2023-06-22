@@ -1,0 +1,85 @@
+
+WEEK 5
+	Hash Tables
+		efficient method of storing a small number of integers from a large range
+	hashing with chaining 
+		add remove and find in O(1)
+		add and remove in O(m) 
+		store data as an array of lists
+		n keeps track of total number of items in all lists
+	linear probing
+	often hash tables store data that are not integers, integer hash code is associated with each data item and its used in the hash table
+
+
+WEEK 6 SUPPLEMENTAL READING
+
+
+GRAPH(discrete mathematics)
+	graph is a structure amounting to a set of objects in which some pairs of the objects are in some sense related
+	vertices/nodes/points - related pair of vertices is called an edge, a connection between two elements
+	edge is also called a link or line
+	edges can be directed or undirected
+	undirected means that the same relationship goes both ways between connected vertices
+	directed means that the relationship is one way
+TREE(graph theory)
+	tree is an undirected graph in which any two vertices are connected by exactly one path
+		connected acyclic undirected graph
+	forest is undirected graph in which any two vertices are connected by at most one path
+		disjoint union of trees
+	data structures are generally rooted trees
+	rooted tree may be directed 
+		out tree - directed tree all its edges point away from root
+		in tree - directed tree all its edges point towards root
+	cycle - non empty train in which only thee first and last vertices are equal
+BINARY SEARCH TREE
+	ordered or sorted binary tree
+	rooted binary tree data structure with key of each internal node being greater than all the keys in the respective nodes left subtree
+	and less than the ones in its right subtree
+	time complexity of operation on the binary search tree is proportional to the height of the tree
+	insert delete and search takes O(log n) for n nodes
+ASSOCIATIVE ARRAY
+	dictionary, map,
+	collection of key value pairs
+
+
+
+WEEK 9 SUPPLEMENTAL READING
+	directed graph has a source of the edge and a target
+	path is a sequences of vertices such that for every the edge between each consecutive vertices is in a set of ordered pairs of vertices
+	if there is a valid path from vertex to some other vertex then we say they are reachable
+	computer networks can be modeled as graphs
+	2 broad categories of graph representations
+		Matrix
+		adjacency matrix can be used to store what is near any vertices
+			high memory requirements
+		Collection of Lists
+		graph is represented as an array of lists.
+		list[i] contains a list of all vertices adjacent to vertex i
+
+WEEK 10 READING
+	Stack<E> - last in first out stack of objects
+		extends class vector with 5 operations that allow a vector to be treated a stack
+		complete set of stack operation sis provided by the duque interface
+	Queue<E> - collection for holding elements prior to processing
+		provides additional insertion extraction and inspection operations
+		typically order elements in a FIRFO first in first out manner
+		exceptions are priority queues
+		generally do not define element based versions of methods equals and hashCode 
+			instead they inherit the identity based version from class Object
+	Deque<E> - linear collection that supports element insertion and removal at both ends
+		double ended queue
+		no fixed limits on the number of elements they may contain
+		has methods to access elements at both ends of duque
+		extends queue interface
+		does not support indexed access to elements
+	Array-Based List - add and remove have running times that depend on n and i
+			arrays cannot shrink or expand
+			must create new arrays this is expensive
+			constant time access to any value in the array, get and set run in constant time
+	Array vs List - arrays have fixed size, lists can grow or shrink
+			array can store element so many type, lists must use typing
+			arrays provide direct access to elements using index, list provides methods like get and set which have slightly higher overhead
+			arrays lack extensive functionality provided by list methods
+			lists enforce type safety
+						
+	
