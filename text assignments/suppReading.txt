@@ -82,4 +82,37 @@ WEEK 10 READING
 			arrays lack extensive functionality provided by list methods
 			lists enforce type safety
 						
-	
+	BREADTH FIRST SEARCH
+		to do a bfs you need to know the number of nodes in graph and adjacency list representing unweighted graph
+		return value is shortest path of nodes
+		solve -> initialize queue structure must have enqueue and dequeue operations
+			intiialize visited array of booleans false size n
+			visisted[start] = true
+			prev track parent node of node[i], initialize with alll null values
+			while queue is not empty
+			pull top node from queue with dequeue
+			get neighbors
+			for each neighbor
+			if it hasn't been visited add to queue with enqueue
+			mark it as visited
+			keep track of parent node in prev array
+			return prev array
+		reconstruct Path => reconstruct path going backwards from end
+			reverse path
+			check if s and e are connected return path else return empty path
+
+	DEPTH FIRST SEARCH
+		searches vertically before horizontal
+		stack keeps track of vertices/node to visit
+		keep track of nodes visited
+		as you visit nodes the adjacent nodes are moved to front of stack
+		remove from stack as you visit
+		similar code to bfs except you use a stack not a queue
+		graph is object with nodes as keys and child nodes as values
+		
+		
+
+
+
+
+		
