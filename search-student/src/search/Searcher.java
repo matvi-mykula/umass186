@@ -4,13 +4,17 @@
 
 package search;
 
+import java.time.chrono.ThaiBuddhistEra;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Set;
+import java.util.Map;
 
 /**
  * An implementation of a Searcher that performs an iterative search,
@@ -48,46 +52,84 @@ public class Searcher<T> {
 	 * 
 	 * @return a solution to the problem (or an empty list)
 	 */
+
 	public List<T> findSolution() {
-		// TODO
-		// Create a queue to keep track of states to explore
-		Queue<T> queue = new LinkedList<>();
+		System.out.println(this.searchProblem.toString());
+		System.out.println(this.searchProblem.getInitialState());
+		System.out.println(this.searchProblem.getSuccessors(this.searchProblem.getInitialState()));
 
-		// Create a set to keep track of visited states
-		Set<T> visited = new HashSet<>();
+		// initialize queue strucutre
+		Queue<T> queue = new ArrayDeque<>();
+		// add start to queue
+		queue.add(this.searchProblem.getInitialState());
+		// initialize visited array of booleans false size of number of nodes
+		Map<T, Boolean> visited = new HashMap<>();
+		// visited[start] = true
+		visited.put(this.searchProblem.getInitialState(), true);
+		// initialize map object to track neighbors of node[i]
+		// return value is going to come from finding shortest list from start to ennd
+		Map<T, List<T>> neighborMap = new HashMap<>();
 
-		// Get the initial state from the search problem
-		T initialState = searchProblem.getInitialState();
+		// initialize parent map
+		// key is node, value is parent
+		Map<T, T> parentMap = new HashMap<>();
 
-		// Enqueue the initial state
-		queue.offer(initialState);
+		/// keep track if find the goal
+		// intitialize to start for typing reasons
+		// this is kinda fucky
+		T goal = this.searchProblem.getInitialState();
 
-		// Start the search loop
-		while (!queue.isEmpty()) {
-			T currentState = queue.poll();
-
-			// Check if the current state is a goal state
-			if (searchProblem.isGoal(currentState)) {
-				// Construct and return the solution path
-				return constructSolutionPath(currentState);
+		// while queue is not empty
+		while (queue.size() > 0) {
+			// get current element and remove from queue
+			T currentElement = queue.poll();
+			// queue.remove(0);
+			// mark visited
+			visited.put(currentElement, true);
+			// check if goal node
+			if (this.searchProblem.isGoal(currentElement)) {
+				goal = currentElement;
+				break;
 			}
-
-			// Mark the current state as visited
-			visited.add(currentState);
-
-			// Get the successor states of the current state
-			List<T> successors = searchProblem.getSuccessors(currentState);
-
-			// Enqueue unvisited successor states
-			for (T successor : successors) {
-				if (!visited.contains(successor)) {
-					queue.offer(successor);
+			// get neighbors
+			List<T> neighbors = this.searchProblem.getSuccessors(currentElement);
+			// add to neighbor map
+			neighborMap.put(currentElement, neighbors);
+			// for each neighbor, if it hasnt been visited add to queue, add parent child
+			// relationship
+			for (T t : this.searchProblem.getSuccessors(currentElement)) {
+				if (visited.get(t) == null) {
+					queue.add(t);
+					parentMap.put(t, currentElement);
 				}
+
 			}
+
+			// return new ArrayList<>();
 		}
 
-		// No solution found, return an empty list
-		return new ArrayList<>();
+		/// reconstruct path by working backward from goal and getting parent
+		List<T> shortestPath = new ArrayList<>();
+		T currentNode = goal;
+		while (!currentNode.equals(this.searchProblem.getInitialState())) {
+			shortestPath.add(currentNode);
+			currentNode = parentMap.get(currentNode);
+		}
+		// add start to path then reverse
+		shortestPath.add(this.searchProblem.getInitialState());
+
+		// keep track of parent node in prev aray
+		// return prev array
+
+		// reconstruct path from start to end
+		// reverse path
+		// if they arent connect return empty list
+		if (shortestPath.size() > 0) {
+			Collections.reverse(shortestPath);
+			return shortestPath;
+		} else {
+			return new ArrayList<>();
+		}
 	}
 
 	/**
@@ -130,20 +172,21 @@ public class Searcher<T> {
 		// TODO
 		return true;
 	}
-
-	private List<T> constructSolutionPath(T currentState) {
-		List<T> solutionPath = new ArrayList<>();
-		solutionPath.add(currentState);
-
-		// Trace back the path from the goal state to the initial state
-		while (currentState != searchProblem.getInitialState()) {
-			currentState = searchProblem.getPredecessorState(currentState);
-			solutionPath.add(currentState);
-		}
-
-		// Reverse the path to get the correct order
-		Collections.reverse(solutionPath);
-
-		return solutionPath;
-	}
 }
+// /// i dont really know whats going on here
+// private List<T> constructSolutionPath(T currentState) {
+// List<T> solutionPath = new ArrayList<>();
+// solutionPath.add(currentState);
+
+// // Trace back the path from the goal state to the initial state
+// while (currentState != searchProblem.getInitialState()) {
+// currentState = searchProblem.getPredecessorState(currentState);
+// solutionPath.add(currentState);
+// }
+
+// // Reverse the path to get the correct order
+// Collections.reverse(solutionPath);
+
+// return solutionPath;
+// }
+// }

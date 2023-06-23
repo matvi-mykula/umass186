@@ -19,31 +19,32 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.Timeout;
 
-
 public class SearcherTest {
-//	@Rule
-//	public Timeout globalTimeout = new Timeout(500L, TimeUnit.MILLISECONDS);
+	// @Rule
+	// public Timeout globalTimeout = new Timeout(500L, TimeUnit.MILLISECONDS);
 
 	private Maze maze;
 
 	@Before
 	public void before() {
 		maze = new MazeGenerator(3, 3, 2).generateDfs();
-		/* maze should now be:
-		#0#1#2#
-		0  S  0
-		# # # #
-		1     1
-		# ### #
-		2  G  2
-		#0#1#2#
-		*/
+		/*
+		 * maze should now be:
+		 * #0#1#2#
+		 * 0 S 0
+		 * # # # #
+		 * 1 1
+		 * # ### #
+		 * 2 G 2
+		 * #0#1#2#
+		 */
 	}
-	
+
 	@Test
 	public void testIsValidSolution() {
 		List<Cell> solution = new ArrayList<Cell>();
 		final Searcher<Cell> s = new Searcher<Cell>(maze);
+		System.out.println(s);
 		solution.add(new Cell(1, 0));
 		solution.add(new Cell(0, 0));
 		solution.add(new Cell(0, 1));
@@ -94,9 +95,17 @@ public class SearcherTest {
 		solution.add(new Cell(1, 2));
 		assertFalse(s.isValidSolution(solution));
 	}
-	
+
 	@Test
 	public void testSolver() {
+		final Searcher<Cell> s = new Searcher<Cell>(maze);
+		assertTrue(s.isValidSolution(s.findSolution()));
+	}
+
+	@Test
+	public void testSolverAgain() {
+		maze = new MazeGenerator(3, 3, 1).generateDfs();
+
 		final Searcher<Cell> s = new Searcher<Cell>(maze);
 		assertTrue(s.isValidSolution(s.findSolution()));
 	}
