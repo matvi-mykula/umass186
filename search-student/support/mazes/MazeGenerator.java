@@ -26,7 +26,7 @@ public class MazeGenerator {
 	private final Random random;
 
 	/**
-	 * Creates a new Maze of the given dimensions. 
+	 * Creates a new Maze of the given dimensions.
 	 * 
 	 * Using the same width, height, and seed will always result in the same maze.
 	 * 
@@ -34,7 +34,7 @@ public class MazeGenerator {
 	 * 
 	 * @param width
 	 * @param height
-	 * @param seed 
+	 * @param seed
 	 */
 	public MazeGenerator(int width, int height, long seed) {
 		if (width < 1 || height < 1) {
@@ -167,4 +167,5 @@ public class MazeGenerator {
 
 		return neighbors;
 	}
+
 }

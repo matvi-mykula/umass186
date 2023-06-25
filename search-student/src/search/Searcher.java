@@ -54,9 +54,6 @@ public class Searcher<T> {
 	 */
 
 	public List<T> findSolution() {
-		System.out.println(this.searchProblem.toString());
-		System.out.println(this.searchProblem.getInitialState());
-		System.out.println(this.searchProblem.getSuccessors(this.searchProblem.getInitialState()));
 
 		// initialize queue strucutre
 		Queue<T> queue = new ArrayDeque<>();
@@ -106,6 +103,10 @@ public class Searcher<T> {
 			}
 
 			// return new ArrayList<>();
+		}
+		// check if goal never was reasssigned then there is no path to goal
+		if (goal.equals(this.searchProblem.getInitialState())) {
+			return new ArrayList<>();
 		}
 
 		/// reconstruct path by working backward from goal and getting parent
